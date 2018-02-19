@@ -12,7 +12,7 @@ public class CodingTree {
 
     public String bits;
 
-    public CodingTree(String message) {
+    public CodingTree(String message) throws IOException {
         codes = new HashMap<Character, String>();
         int[] counts = new int[CHAR_MAX];
         for(int i = 0; i < message.length(); i++) {
@@ -34,10 +34,18 @@ public class CodingTree {
             queue.add(temp);
         }
         huffmanTree = queue.poll();
+
+        write();
     }
 
-    public void write() {
+
+    public void write() throws IOException{
+        PrintStream output = new PrintStream(new File("codes.txt"));
         write(huffmanTree, "");
+        for (Character key : this.codes.keySet()) {
+            output.println(key);
+            output.println(this.codes.get(key));
+        }
     }
 
     // Helper method for the writing method.
