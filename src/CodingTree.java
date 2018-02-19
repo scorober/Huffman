@@ -1,12 +1,15 @@
 import java.util.*;
+
 import java.io.*;
 
 public class CodingTree {
 
-    //lala
     private HuffmanNode huffmanTree;
 
     public static final int CHAR_MAX = 256;  // max char value to be encoded
+    public static final boolean DEBUG = false; // set to true to print ASCII 0s
+
+    private static final int BYTE_SIZE = 8; // digits per byte
 
     public Map<Character, String> codes;
 
@@ -34,18 +37,20 @@ public class CodingTree {
             queue.add(temp);
         }
         huffmanTree = queue.poll();
-
         write();
+        encode(message);
     }
 
-
-    public void write() throws IOException{
+    public void write() throws IOException {
         PrintStream output = new PrintStream(new File("codes.txt"));
         write(huffmanTree, "");
-        for (Character key : this.codes.keySet()) {
+        for(Character key : this.codes.keySet()) {
             output.println(key);
             output.println(this.codes.get(key));
+
         }
+        output.close();
+
     }
 
     // Helper method for the writing method.
@@ -59,31 +64,25 @@ public class CodingTree {
         }
     }
 
-    // Constructor of the HuffmanTree for the encode class and decode method.
-    // Takes a scanner as a parameter.
-    // Uses a helper method build for recursion building of the tree.
-    public CodingTree(Scanner input) {
-        while(input.hasNextLine()) {
-            int n= Integer.parseInt(input.nextLine()); // ASCII code
-            String code = input.nextLine();  // HuffmanCode
-            huffmanTree = build(huffmanTree, n, code);
+    private void encode(String message) throws IOException {
+        PrintStream output = new PrintStream(new File("compressed.txt"));
+        int digits = 0;
+        int numDigits = 0;
+        for(char c : message.toCharArray()) {
+            String temp = codes.get(c);
+            for(int i = 0; i < temp.length(); i++) {
+                int bit = (temp.charAt(i) - '0');
+//				if(bit < 0 || bit > 1)
+//					throw new IllegalArgumentException("Illegal Bit: " + bit);
+                digits += bit << numDigits;
+                numDigits++;
+                if (numDigits == BYTE_SIZE) {
+                    output.write(digits);
+                    digits = 0;
+                    numDigits = 0;
+                }
+            }
         }
-    }
-
-    // Helper method for the decode constructor of the HuffmanTree.
-    // Takes a HuffmanNode, an int and a String as parameters.
-    // it returns a HuffmanNode.
-    private HuffmanNode build(HuffmanNode root, int ascii, String code) {
-        if(root == null) {
-            root = new HuffmanNode();
-        }
-        if(code.equals("")) {
-            return new HuffmanNode(0,ascii);
-        } else if('0' == code.charAt(0)) {
-            root.setZero(build(root.getZero(), ascii, code.substring(1)));
-        } else if('1' == code.charAt(0)) {
-            root.setOne(build(root.getOne(), ascii, code.substring(1)));
-        }
-        return root;
+        output.close();
     }
 }
