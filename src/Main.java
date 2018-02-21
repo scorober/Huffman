@@ -29,16 +29,15 @@ public class Main {
 		long elapsedTime = (endTime - startTime ) / 1000000;
 
         File file = new File(inFile);
-        long fileSize = file.length();
-        System.out.println("Uncompressed file size : " + fileSize + " bytes");
+        double fileSize = file.length();
+        System.out.println("\nUncompressed file size : " + (int) fileSize + " bytes");
 
         File cfile = new File("compressed.txt");
-        long cfileSize = cfile.length();
-        System.out.println("Compressed file size : " + cfileSize + " bytes");
+        double cfileSize = cfile.length();
+        System.out.println("Compressed file size : " + (int) cfileSize + " bytes");
 
-        //Not Working 
-        double ratio = (cfileSize/fileSize)*100;
-        System.out.println("Compression ratio: " + ratio + '%');
+        double ratio = (cfileSize/fileSize) * 100;
+        System.out.println("Compression ratio: " + (int) ratio + "%");
         
         System.out.println("Running time:" + elapsedTime + " milliseconds");
 
