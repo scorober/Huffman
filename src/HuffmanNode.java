@@ -1,5 +1,11 @@
-// This Object allows easier use of binary search trees in the HuffmanTree class.
-
+/**
+ *
+ * This Object allows easier use of binary search trees in the HuffmanTree class.
+ * @author Eviatar Goldschmidt, Scott Robertson, Danny Carns
+ * 
+ * Project 2, Coding Tree, 02/22/2018
+ *
+ */
 
 public class HuffmanNode implements Comparable<HuffmanNode> {
 
