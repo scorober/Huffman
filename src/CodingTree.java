@@ -79,7 +79,7 @@ public class CodingTree {
 		huffmanTree = queue.poll();
 		write();
 		encode(message);
-		decode("compressed.txt");
+//		decode("compressed.txt");
 	}
 
 	/**
