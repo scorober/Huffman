@@ -42,6 +42,8 @@ public class CodingTree {
 	 * This is the bit string for the encode method. 
 	 */
 	public String bits;
+	
+	private int digits;
 
 	/**
 	 * The CodingTree takes a string that is the entire textfile from the main method. It then 
@@ -77,7 +79,7 @@ public class CodingTree {
 		huffmanTree = queue.poll();
 		write();
 		encode(message);
-		//decode("compressed.txt");
+		decode("compressed.txt");
 	}
 
 	/**
@@ -144,30 +146,37 @@ public class CodingTree {
 	
 	// This method does not work as intended please disregard, working on after project.
 	private void decode(String file) throws IOException {
-		FileInputStream input = new FileInputStream(file);
-		PrintStream output = new PrintStream(new File("decodedText.txt"));
-		boolean isEof = false;
-		while (isEof == false) {
-			isEof = decode(input, output, huffmanTree);
+		try{
+			FileInputStream input = new FileInputStream(file);
+			nextByte(input);
+			PrintStream output = new PrintStream(new File("decodedText.txt"));
+			boolean isEof = false;
+			while (isEof == false) {
+				isEof = decode(input, output, huffmanTree);
+			}
+			output.close();
+			
+		} catch (IOException e) {
+			throw new RuntimeException(e.toString());
 		}
-		output.close();
 		
 	}
 	
 	// This method does not work as intended please disregard, working on after project.
 	private boolean decode(FileInputStream input, PrintStream output, HuffmanNode root) throws IOException {
 		boolean isEof = false;
+		//int digits = nextByte(input);
 		if(root.getZero() == null && root.getOne() == null) {
 			if(root.getChar() == CHAR_MAX) {
 				input.close();
 				return true;
 			} else {
 			output.print((char) root.getChar());
-			System.out.print((char) root.getChar());
+//			System.out.print((char) root.getChar());
 			}
 		} else {
-			int digits = nextByte(input);
-			int cur = readBit(input, digits);
+			
+			int cur = readBit(input);
 			if(cur == 0) {
 				isEof = decode(input, output, root.getZero());
 			} else if (cur == 1) {
@@ -178,7 +187,7 @@ public class CodingTree {
 	}
 		
 	// This method does not work as intended please disregard, working on after project.
-	private int readBit(FileInputStream input, int digits) {
+	private int readBit(FileInputStream input) {
 		// if at eof, return -1
 		
 		if (digits == -1)
@@ -187,23 +196,21 @@ public class CodingTree {
 		digits /= 2;
 		numDigitsDec++;
 		if (numDigitsDec == BYTE_SIZE) {
-			digits = nextByte(input);
+			nextByte(input);
 		}
 		return result;
 	    
 	}
 	
 	// This method does not work as intended please disregard, working on after project.
-	private int nextByte(FileInputStream input) {
-        int digits;
-		try {
+	private void nextByte(FileInputStream input) {
+        try {
             digits = input.read();
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
 		numDigitsDec = 0;
-	    return digits;
-    }
+	}
 }
 
 
