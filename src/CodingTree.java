@@ -177,6 +177,7 @@ public class CodingTree {
 		} else {
 			
 			int cur = readBit(input);
+			
 			if(cur == 0) {
 				isEof = decode(input, output, root.getZero());
 			} else if (cur == 1) {
