@@ -61,7 +61,7 @@ public class CodingTree {
 		for(int i = 0; i < message.length(); i++) {
 			counts[(int)message.charAt(i)]++;
 		} 
-		PriorityQueue<HuffmanNode> queue = new PriorityQueue<HuffmanNode>();
+		MyPriorityQueue<HuffmanNode> queue = new MyPriorityQueue<HuffmanNode>();
 		for(int i = 0; i < counts.length; i++) {
 			if(counts[i] != 0) {
 				queue.add(new HuffmanNode(counts[i], i));
