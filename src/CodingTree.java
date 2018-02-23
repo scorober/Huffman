@@ -39,6 +39,7 @@ public class CodingTree {
 		huffmanTree = queue.poll();
 		write();
 		encode(message);
+		decode();
 	}
 
 	public void write() throws IOException {
@@ -69,6 +70,34 @@ public class CodingTree {
 		int digits = 0;
 		int numDigits = 0;
 		for(char c : message.toCharArray()) {
+			String temp = codes.get(c);
+			for(int i = 0; i < temp.length(); i++) {
+				int bit = (temp.charAt(i) - '0');
+				digits += bit << numDigits;
+				numDigits++;
+				if (numDigits == BYTE_SIZE) {
+					output.write(digits);
+					digits = 0;
+					numDigits = 0;
+				}
+			}
+		}
+		output.close();
+	}
+	private void decode() throws FileNotFoundException {
+//		FileInputStream input = new FileInputStream(inFile);
+        Scanner line = new Scanner(new File("compressed.txt"));
+        StringBuilder fileString = new StringBuilder();
+        while(line.hasNextLine()) {
+        		fileString.append(line.nextLine());
+        		fileString.append('\n');
+        		
+        }
+        String codedMessage = fileString.toString();
+        PrintStream output = new PrintStream(new File("compressed.txt"));
+		int digits = 0;
+		int numDigits = 0;
+		for(char c : codedMessage.toCharArray()) {
 			String temp = codes.get(c);
 			for(int i = 0; i < temp.length(); i++) {
 				int bit = (temp.charAt(i) - '0');
